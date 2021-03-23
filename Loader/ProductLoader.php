@@ -29,7 +29,5 @@ class ProductLoader
         foreach ($productsArray as $product){
             $products[] = new Product((int)$product['id'],$product['name'],(int)$product['price']);
         }
-
         return $products;
     }
-}

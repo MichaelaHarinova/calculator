@@ -17,6 +17,13 @@ class Product
 
     }
 
+    public static function loadFromDatabase(int $id, string $name, int $price) : Product
+    {
+        $product = new Product($name, $price);
+        $product->id = $id;
+        return $product;
+    }
+
     public function getId():? int
     {
         return $this->id;

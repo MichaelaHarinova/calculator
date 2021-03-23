@@ -19,7 +19,7 @@ class CustomerLoader
 
     public function getAllCustomers(Pdo $pdo): array
     {
-        $query = $pdo->query('select * from customer ORDER BY name');
+        $query = $pdo->query('select * from customer ORDER BY lastname');
         $rawCustomers = $query->fetchAll();
     }
 
