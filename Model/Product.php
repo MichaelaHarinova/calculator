@@ -1,18 +1,20 @@
 <?php
 declare(strict_types=1);
-require 'Product.php';
-require 'Connection.php';
+
+
 
 class Product
 {
     private int $id;
     private string $name;
-    private int $price;
+    private float $price;
 
-    public function __construct(string $name, int $price)
+    public function __construct(int $id,string $name, float $price)
     {
+        $this->id = $id;
         $this->name = $name;
-        $this->price = $price;
+        $this->price = $price/100; //put it in calculater later
+
     }
 
     public function getId():? int
@@ -25,7 +27,7 @@ class Product
         return $this->name;
     }
 
-    public function getPrice(): int
+    public function getPrice(): float
     {
         return $this->price;
     }

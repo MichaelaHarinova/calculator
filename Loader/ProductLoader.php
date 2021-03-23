@@ -10,14 +10,24 @@ class ProductLoader
         $this->pdo = $db->openConnection();
     }
 
-    public static function getAllProducts(PDO $pdo): array
+    public function getProduct(int $productID) :Product {
+        $query = $this->pdo->query('select id, name, price from product where id = :productID');
+        $query->execute();
+        $rawProduct = $query->fetchAll();
+        $product = new Product ((int)$rawProduct['id'], $rawProduct['name'], (int)$rawProduct['price']);
+
+        return $product;
+    }
+
+
+    public function getAllProducts(): array
     {
-        $query = $pdo->query('select * from product ORDER BY name');
+        $query = $this->pdo->query('select * from product ORDER BY name');
         $productsArray = $query->fetchAll();
         $products = [];
 
-        foreach ($productsArray as $products){
-            $products[] = new Products((int)$products['id'],$products['name'],(int)$products['price']);
+        foreach ($productsArray as $product){
+            $products[] = new Product((int)$product['id'],$product['name'],(int)$product['price']);
         }
 
         return $products;

@@ -13,6 +13,7 @@ Anything complex should be calculated in the model -->
 
             foreach($products AS $product):?>
                 <option value="<?php echo $product->getName() . '-' . $product->getPrice(); ?>">
+                    <?php echo $product->getName() . '-' . $product->getPrice(); ?>
                 </option>
             <?php endforeach;?>
         </select>

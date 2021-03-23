@@ -1,25 +1,27 @@
 <?php
 declare(strict_types = 1);
-
+require 'Model/Connection.php';
+require 'Loader/ProductLoader.php';
 class Controller
 {
-    private PDO $pdo;
+    private ProductLoader $productLoader;
+    private CustomerLoader $customerLoader;
+
     public function __construct(){
-        $db = new Connection();
-        $this->pdo = $db->openConnection();
+        $this->productLoader = new ProductLoader();
     }
 
-    public function render (array $_GET, array $_POST){
+    public function render() :void {
+        $products =$this-> productLoader->getAllProducts();
         require 'View/homepage.php';
         if(isset($_POST['calculate'])){
-
+        require 'View/resultCalculation.php';
         }
-        require 'View/includes/footer.php';
+
     }
 
-    public function productView($products) {
-        $products = ProductLoader::getAllProducts($products);
-        require 'View/homepage.php';
-    }
+
+
+
 
 }
