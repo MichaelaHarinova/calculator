@@ -9,11 +9,16 @@ class ProductLoader
         $db = new Connection();
         $this->pdo = $db->openConnection();
     }
-    public function getAllProducts(): array
+
+    public static function getAllProducts(PDO $pdo): array
     {
-        $query = $this->pdo->query('select * from product ORDER BY name');
-        $query->execute();
-        $rawProducts = $query->fetchAll();
+        $query = $pdo->query('select * from product ORDER BY name');
+        $productsArray = $query->fetchAll();
+        $products = [];
+
+        foreach ($productsArray as $products){
+            $products[] = new Products((int)$products['id'],$products['name'],(int)$products['price']);
+        }
 
         return $products;
     }
