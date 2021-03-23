@@ -13,13 +13,6 @@ class Product
         $this->price = $price;
     }
 
-    public static function loadProducts(int $id, string $name, int $price) : Product
-    {
-        $product = new Product($name, $price);
-        $product->id = $id;
-        return $product;
-    }
-
     public function getId():? int
     {
         return $this->id;
