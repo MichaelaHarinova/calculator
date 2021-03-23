@@ -1,5 +1,5 @@
     <footer>
-        &copy; BeCode <?php echo date('Y')?>
+        &copy; Micha + Mark <?php echo date('Y')?>
     </footer>
 </body>
 </html>
