@@ -2,8 +2,12 @@
 declare(strict_types=1);
 
 function openConnection(): PDO
+
 {
-   
+    $dbhost = "localhost";
+    $dbuser = "becode";
+    $dbpass = "Afje6WRh*";
+    $db = "calculator";
 
     $driverOptions = [
         PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'",
