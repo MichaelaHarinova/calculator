@@ -1,6 +1,5 @@
 <?php
 
-
 class ProductLoader
 {
     public static function getAllProducts(Pdo $pdo): array

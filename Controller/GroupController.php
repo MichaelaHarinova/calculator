@@ -10,6 +10,6 @@ class GroupController
         // then the view will actually display them.
 
         //load the view
-        require 'View/info.php';
+        require 'View/homepage.php';
     }
 }
