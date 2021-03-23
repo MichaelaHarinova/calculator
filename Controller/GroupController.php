@@ -12,4 +12,4 @@ class GroupController
         //load the view
         require 'View/homepage.php';
     }
-}CustomerLoader.php
+}
