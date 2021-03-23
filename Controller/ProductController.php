@@ -14,5 +14,4 @@ class ProductController
         require 'View/Product/productview.php';
     }
 
-
 }
