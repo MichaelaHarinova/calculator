@@ -2,15 +2,17 @@
 
 class ProductLoader
 {
-    private array $products =[];
+    private array $products = [];
     private PDO $pdo;
 
-    public function __construct(){
+    public function __construct()
+    {
         $db = new Connection();
         $this->pdo = $db->openConnection();
     }
 
-    public function getProduct(int $productID) :Product {
+    public function getProduct(int $productID): Product
+    {
         $query = $this->pdo->query('select id, name, price from product where id = :productID');
         $query->execute();
         $rawProduct = $query->fetchAll();
@@ -26,8 +28,9 @@ class ProductLoader
         $productsArray = $query->fetchAll();
         $products = [];
 
-        foreach ($productsArray as $product){
-            $products[] = new Product((int)$product['id'],$product['name'],(int)$product['price']);
+        foreach ($productsArray as $product) {
+            $products[] = new Product((int)$product['id'], $product['name'], (int)$product['price']);
         }
         return $products;
     }
+}
