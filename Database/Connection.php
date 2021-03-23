@@ -1,19 +1,15 @@
 <?php
-declare(strict_types=1);
 
-function openConnection(): PDO
-
+class Connection extends PDO
 {
-    $dbhost = "localhost";
-    $dbuser = "becode";
-    $dbpass = "";
-    $db = "calculator";
+    function __construct()
+    {
+        $driverOptions = [
+            PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'",
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        ];
 
-    $driverOptions = [
-        PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'",
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    ];
-
-    return new PDO('mysql:host=' . $dbhost . ';dbname=' . $db, $dbuser, $dbpass, $driverOptions);
+        parent::__construct('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME, DB_USERNAME, DB_PASSWORD, $driverOptions);
+    }
 }

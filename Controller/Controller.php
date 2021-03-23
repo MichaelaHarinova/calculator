@@ -3,23 +3,14 @@ declare(strict_types = 1);
 
 class Controller
 {
-    private PDO $pdo;
-    public function __construct(){
-        $db = new Connection();
-        $this->pdo = $db->openConnection();
+    private Connection $db;
+
+    public function __construct() {
+        $this->db = new Connection;
     }
 
-    public function render (array $_GET, array $_POST){
-        require 'View/homepage.php';
-        if(isset($_POST['calculate'])){
-
-        }
-        require 'View/includes/footer.php';
+    public function overview(array $GET, array $POST) {
+        $users = CustomerLoader::getCustomers($this->db);
+        require 'Model/Customer.php';
     }
-
-    public function productView($products) {
-        $products = ProductLoader::getAllProducts($products);
-        require 'View/homepage.php';
-    }
-
 }
