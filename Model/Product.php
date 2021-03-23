@@ -1,5 +1,7 @@
 <?php
 declare(strict_types=1);
+require 'Product.php';
+require 'Connection.php';
 
 class Product
 {

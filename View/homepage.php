@@ -10,6 +10,7 @@ Anything complex should be calculated in the model -->
         <select Product Name='NEW'>
             <option value="">--- Select ---</option>
             <?php
+
             foreach($products AS $product):?>
                 <option value="<?php echo $product->getName() . '-' . $product->getPrice(); ?>">
                 </option>
