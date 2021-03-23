@@ -15,7 +15,6 @@ class ProductLoader
         $query->execute();
         $rawProducts = $query->fetchAll();
 
-
         return $products;
     }
 }
