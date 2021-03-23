@@ -2,19 +2,20 @@
 
 class ProductLoader
 {
-    public static function getAllProducts(Pdo $pdo): array
+    private array $products =[];
+    private PDO $pdo;
+
+    public function __construct(){
+        $db = new Connection();
+        $this->pdo = $db->openConnection();
+    }
+    public function getAllProducts(): array
     {
-        $query = $pdo->query('select * from product ORDER BY name');
+        $query = $this->pdo->query('select * from product ORDER BY name');
+        $query->execute();
         $rawProducts = $query->fetchAll();
 
-        $products = [];
-        foreach ($rawProducts as ['id' => $id, 'name' => $name, 'price' => $price]) {
-            $products[] = Product::loadProducts(
-                $id,
-                $name,
-                $price
-            );
-        }
+
         return $products;
     }
 }
