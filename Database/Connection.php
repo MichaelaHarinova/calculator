@@ -1,6 +1,5 @@
 <?php
 
-
 class Connection
 {
     private const HOST = "localhost";
