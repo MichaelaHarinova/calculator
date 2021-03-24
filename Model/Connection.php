@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 class Connection
 {
-
+    private const HOST = "localhost";
+    private string $user = "becode";
+    private string $pwd = "Afje6WRh*";
+    private string $dbName = "calculator";
 
     public function openConnection() : PDO
     {

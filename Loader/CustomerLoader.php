@@ -34,7 +34,7 @@ class CustomerLoader
         return $customers;
     }
 
-//customers or group?
+
     public function getAllGroups(int $groupID): array
     {
         $query = $this->pdo->prepare('select * from customer_group WHERE id = :groupID ORDER BY name');

@@ -6,6 +6,7 @@ class Calculator
     private int $variableDiscount; //gets highest discount from all groups
     private int $fixedDiscount; //counts all discounts up
     private int $price;
+    private const DIVIDER = 100;
 
 
     //find the highest group discount
@@ -17,37 +18,53 @@ class Calculator
     //price is never negative
 
 
-    public function groupsDiscount($rawGroup, $price) : int
+    public function groupsDiscount($group, $price): int
     {
-        $highestVarDiscount = max(array((int)$rawGroup['variable_discount']));       //find the highest group discount
-        $totalOfFixedDiscounts = ($price - (int)$rawGroup['fixed_discount'])/100;    //count all fixed discounts in the group
+        $varDisGroup = $group->getVariableDiscount();
+        $fixDisGroup = $group->getFixedDiscount();
+        var_dump ($fixDisGroup);
+        $highestVarDiscount = ($price/ self::DIVIDER) * max(array($varDisGroup/ self::DIVIDER)) ;    //find the highest group discount
+        //turn %into int or floats?
+
+        if (isset($fixDisGroup)) {
+            $totalOfFixedDiscounts = array_sum(array($fixDisGroup));          //count all fixed discounts in the group
+        }
+    }
+
+    //look up costumers discount
+    public function customerDiscount($customer): int
+    {
+        $varDisCustomer = $customer->getVariableDiscount();
+        $fixDisCostumer = $customer->getFixedDiscount();
 
         //compare which discount give customer more value
-        if ($highestVarDiscount >= $totalOfFixedDiscounts){
-            $betterDiscount = $highestVarDiscount;
-        }else{
-            $betterDiscount = $totalOfFixedDiscounts;
+        if ($varDisCustomer >= $fixDisCostumer) {
+            $betterDiscount = $varDisCustomer;
+        } else {
+            $betterDiscount = $fixDisCostumer;
         }
         return $betterDiscount;
     }
 
-    //look up costumers discount
-    public function customerDiscount() {
-
-    }
-
 
     //compare customers VS groups if they have % discount
-    public function groupVScustomerDiscount($person, $rawGroup) : int{
-        if(isset($person['variable_discount']) && isset($rawGroup['variable_discount'])){
-            if ((int)$person['variable_discount'] > (int)$rawGroup['variable_discount']){
-                $largestDiscount = $person['variable_discount'] ;
-            }else{
-                $largestDiscount= (int)$rawGroup['variable_discount'];
+    public function groupVScustomerDiscount($customer, $group): int
+    {
+        $varDisCustomer = $customer->getVariableDiscount();
+        $varDisGroup = $group->getVariableDiscout();
+
+        if (isset($varDisCustomer, $varDisGroup)) {
+            if ($varDisCustomer > $varDisGroup) {
+                $largestDiscount = $varDisCustomer;
+        }else{
+                $largestDiscount = $varDisGroup;
             }
             return $largestDiscount;
         }
+    }
 
-}
+    public static function finalResult($price, $betterDiscount) :int {
+        $finalPrice = $price / self::DIVIDER - $betterDiscount;
+    }
 
 }

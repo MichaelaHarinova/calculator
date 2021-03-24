@@ -32,7 +32,7 @@ Anything complex should be calculated in the model -->
         </select><br>
         <input id="submit" type="submit" name="Submit" value="Calculate discount" />
     </form>
-    <div class="result">Test</div>
+    <div class="result"><?php echo Calculator::finalResult() ;?>></div>
 
 </section>
 <?php require 'includes/footer.php'?>
