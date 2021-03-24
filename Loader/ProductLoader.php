@@ -13,7 +13,8 @@ class ProductLoader
 
     public function getProduct(int $productID): Product
     {
-        $query = $this->pdo->query('select id, name, price from product where id = :productID');
+        $query = $this->pdo->prepare('select id, name, price from product where id = :productID');
+        $query-> bindValue(':productID', $productID);
         $query->execute();
         $rawProduct = $query->fetchAll();
         $product = new Product ((int)$rawProduct['id'], $rawProduct['name'], (int)$rawProduct['price']);

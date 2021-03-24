@@ -21,28 +21,18 @@ Anything complex should be calculated in the model -->
 
     <form id="customername" name="customername" method="post" action="<?php echo $PHP_SELF; ?>">
         Customer list:
-        <select Product Name='NEW'>
+        <select Customer Name='NEW'>
             <option value="">--- Select ---</option>
             <?php
             foreach($customers AS $customer):?>
-                <option value="<?php echo $customer->getFullName() ?>">
+                <option value="<?php echo $customer->getFirstName() . ' ' . $customer->getLastName(); ?>">
+                    <?php echo $customer->getFirstName() . ' ' . $customer->getLastName(); ?>
                 </option>
             <?php endforeach;?>
-        </select>
+        </select><br>
+        <input id="submit" type="submit" name="Submit" value="Calculate discount" />
     </form>
-
-    <form id="productlist" name="productlist" method="post" action="<?php echo $PHP_SELF; ?>">
-        Customer group list:
-        <select Product Name='NEW'>
-            <option value="">--- Select ---</option>
-            <?php
-            foreach($groups AS $group):?>
-                <option value="<?php echo $product->getGroupName() ?>">
-                </option>
-            <?php endforeach;?>
-        </select>
-        <input type="submit" name="Submit" value="Calculate discount" />
-    </form>
+    <div class="result">Test</div>
 
 </section>
 <?php require 'includes/footer.php'?>

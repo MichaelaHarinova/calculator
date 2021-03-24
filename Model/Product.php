@@ -1,8 +1,6 @@
 <?php
 declare(strict_types=1);
 
-
-
 class Product
 {
     private int $id;
@@ -13,16 +11,16 @@ class Product
     {
         $this->id = $id;
         $this->name = $name;
-        $this->price = $price/100; //put it in calculater later
+        $this->price = $price/100;
 
     }
 
-    public static function loadFromDatabase(int $id, string $name, int $price) : Product
+ /*   public static function loadFromDatabase(int $id, string $name, int $price) : Product
     {
-        $product = new Product($name, $price);
+        $product = new Product($id,$name, $price);
         $product->id = $id;
         return $product;
-    }
+    }*/
 
     public function getId():? int
     {

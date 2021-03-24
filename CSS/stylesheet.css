@@ -1,0 +1,91 @@
+html {
+    height: 100%;
+}
+
+body {
+    background-color: lightgrey;
+    position: absolute;
+    padding: 0;
+    margin: auto;
+    width: 100%;min-height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    margin: auto;
+    text-align: center;
+}
+
+h2 {
+    margin: auto;
+    text-align: center;
+}
+
+h4 {
+    color: #dd6e6e;
+    text-align: center;
+}
+
+#productlist, #customername {
+    margin: 20px;
+    text-align: center;
+}
+
+#submit {
+    margin: 20px;
+    color: black;
+    background-color: pink;
+    border-color: hotpink;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bolder;
+}
+
+#submit:hover {
+    margin: 20px;
+    color: lightgrey;
+    background-color: deeppink;
+    border-color: lightpink;
+}
+
+a {
+    color: pink;
+    font-weight: bold;
+}
+
+a:hover {
+    color: #fffff0;
+    text-decoration: none;
+}
+
+
+/* HEADER AND FOOTER SECTION */
+
+.footer {
+    background-color: rebeccapurple;
+    width: 100%;
+    height: auto;
+    display: block;
+    position: relative;
+    padding-top: 2rem;
+    margin-top: auto;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    box-shadow: 0 5px 5px 10px black;
+
+}
+
+.footercontainer {
+    padding-left: 12%;
+    padding-right: 12%;
+    position: relative;
+}
+
+.copyright {
+    font-weight: bold;
+    color: #fffff0;
+}
