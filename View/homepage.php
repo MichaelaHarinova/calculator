@@ -1,38 +1,32 @@
-<?php require 'includes/header.php'?>
-<!-- this is the view, try to put only simple if's and loops here.
-Anything complex should be calculated in the model -->
 <section>
-
     <h2>Products database</h2>
-
-    <form id="productlist" name="productlist" method="post" action="<?php echo $PHP_SELF; ?>">
+    <form id="productlist" name="productlist" method="post">
         Product list:
-        <select Product Name='NEW'>
+        <select Name='productID'>
             <option value="">--- Select ---</option>
             <?php
 
-            foreach($products AS $product):?>
-                <option value="<?php echo $product->getName() . '-' . $product->getPrice(); ?>">
-                    <?php echo $product->getName() . '-' . $product->getPrice(); ?>
+
+            /** @var Product[] $products */
+            foreach ($products as $product):?>
+                <option value="<?php echo $product->getId(); ?>">
+                    <?php echo $product->getName() . ' - ' . $product->getPrice(); ?>
                 </option>
-            <?php endforeach;?>
+            <?php endforeach; ?>
         </select>
-    </form>
-
-    <form id="customername" name="customername" method="post" action="<?php echo $PHP_SELF; ?>">
+        <br>
         Customer list:
-        <select Customer Name='NEW'>
+        <select Name='customerID'>
             <option value="">--- Select ---</option>
             <?php
-            foreach($customers AS $customer):?>
-                <option value="<?php echo $customer->getFirstName() . ' ' . $customer->getLastName(); ?>">
+            /** @var Customer[] $customers */
+            foreach ($customers as $customer):?>
+                <option value="<?php echo $customer->getId(); ?>">
                     <?php echo $customer->getFirstName() . ' ' . $customer->getLastName(); ?>
                 </option>
-            <?php endforeach;?>
+            <?php endforeach; ?>
         </select><br>
-        <input id="submit" type="submit" name="Submit" value="Calculate discount" />
+        <input id="submit" type="submit" name="calculate" value="Calculate discount"/>
     </form>
-    <div class="result"><?php echo Calculator::finalResult() ;?>></div>
-
+    <div class="result"><?php ?></div>
 </section>
-<?php require 'includes/footer.php'?>

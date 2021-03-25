@@ -5,6 +5,7 @@ class GroupLoader
     private array $groups = [];
     private PDO $pdo;
 
+
     public function __construct()
     {
         $db = new Connection();
@@ -21,7 +22,6 @@ class GroupLoader
         $group = new Group ((int)$rawGroup['id'], $rawGroup['name'], (int)$rawGroup['parent_id'], (int)$rawGroup['fixed_discount'], (int)$rawGroup['variable_discount']);
 
         return $group;
-
     }
 
 

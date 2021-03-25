@@ -10,17 +10,19 @@ class CustomerLoader
         $this->pdo = $db->openConnection();
     }
 
+
     public function getCustomer(int $customerID): Customer
     {
         $query = $this->pdo->prepare('select id, firstname, lastname, group_id, fixed_discount, variable_discount from customer where id = :customerID');
         $query->bindValue(':customerID', $customerID);
         $query->execute();
-        $customer = $query->fetchAll();
+        //returns array of arrays, it will always contain a unique record, so we take the 1st one
+        $customer = $query->fetchAll()[0];
         $customer = new Customer((int)$customer['id'], $customer['firstname'], $customer['lastname'], (int)$customer['fixed_discount'], (int)$customer['variable_discount'], $this->getAllGroups($customer['group_id']));
-
 
         return $customer;
     }
+
 
     public function getAllCustomers(): array
     {
@@ -29,32 +31,33 @@ class CustomerLoader
         $customers = [];
 
         foreach ($customersArray as $customer) {
-            $customers[] = new Customer((int)$customer['id'], $customer['firstname'], $customer['lastname'], (int)$customer['fixed_discount'], (int)$customer['variable_discount'], $this->getAllGroups($customer['group_id']));
+            $customers[] = new Customer((int)$customer['id'], $customer['firstname'], $customer['lastname'], (int)$customer['fixed_discount'], (int)$customer['variable_discount']);
         }
         return $customers;
     }
 
 
+//in here because I'm getting customers
     public function getAllGroups(int $groupID): array
     {
         $query = $this->pdo->prepare('select * from customer_group WHERE id = :groupID ORDER BY name');
         $groups = [];
-
         //gets the original group
         $query->bindValue(':groupID', $groupID);
         $query->execute();
         $group = $query->fetchAll()[0];
         $groups[] = new Group((int)$group['id'], $group['name'], $group['parent_id'],$group['fixed_discount'], $group['variable_discount']);
 
+        //gets the last group from the array
+        $parentID = $groups[0]->getParentId();
         //to get all the parents via parent ID, group in the group?
-        while (isset($group['parent_id'])) {
+        while (isset($parentID)) {
             $query->bindValue(':groupID', $group['parent_id']);
             $query->execute();
             $group = $query->fetchAll()[0];
             $groups[] = new Group($group['id'], $group['name'], $group['parent_id'], $group['fixed_discount'], $group['variable_discount']);
+            $parentID = $groups[count($groups)-1]->getParentId();
         }
         return $groups;
     }
-
-
 }
