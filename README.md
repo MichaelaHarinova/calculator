@@ -1,6 +1,6 @@
 # PHP Price Calculator
 
-
+![calculator](img/coverCalc.png)
 
 ### A project created by team of two students of BeCode during our web development training.
 
