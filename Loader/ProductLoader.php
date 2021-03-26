@@ -5,18 +5,22 @@ class ProductLoader
     private array $products = [];
     private PDO $pdo;
 
+
     public function __construct()
     {
         $db = new Connection();
         $this->pdo = $db->openConnection();
     }
 
+
     public function getProduct(int $productID): Product
     {
         $query = $this->pdo->prepare('select id, name, price from product where id = :productID');
         $query-> bindValue(':productID', $productID);
         $query->execute();
-        $rawProduct = $query->fetchAll();
+
+        //fetch - test
+        $rawProduct = $query->fetchAll()[0];
         $product = new Product ((int)$rawProduct['id'], $rawProduct['name'], (int)$rawProduct['price']);
 
         return $product;
