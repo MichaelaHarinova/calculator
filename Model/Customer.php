@@ -59,7 +59,8 @@ class Customer
         return $this->variable_discount;
     }
 
-    public function hasFixedDiscount() : bool{
+    public function hasFixedDiscount(): bool
+    {
         return $this->fixed_discount !== 0;
     }
 }
