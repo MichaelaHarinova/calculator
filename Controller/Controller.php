@@ -1,9 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-require 'Loader/ProductLoader.php';
-require 'Loader/CustomerLoader.php';
-require 'Loader/GroupLoader.php';
+
 
 class Controller
 {
@@ -27,6 +25,9 @@ class Controller
     public function renderPrice(int $customerID,int $productID) : void {
         $customer = $this->customerLoader->getCustomer($customerID);
         $product = $this->productLoader->getProduct($productID);
-        echo '<div class="result">' . Calculator::calculatePrice($customer, $product) . '</div>';
+        $calculator= new Calculator();
+        $result = $calculator->calculateBestDiscount($customer, $product);
+
+        require 'View/calcView.php';
     }
 }

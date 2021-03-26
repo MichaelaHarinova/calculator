@@ -5,8 +5,6 @@
         <select Name='productID'>
             <option value="">--- Select ---</option>
             <?php
-
-
             /** @var Product[] $products */
             foreach ($products as $product):?>
                 <option value="<?php echo $product->getId(); ?>">
@@ -28,5 +26,4 @@
         </select><br>
         <input id="submit" type="submit" name="calculate" value="Calculate discount"/>
     </form>
-    <div class="result"><?php ?></div>
 </section>

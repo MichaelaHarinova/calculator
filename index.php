@@ -3,6 +3,10 @@ declare(strict_types=1);
 
 require 'View/includes/header.php';
 
+require 'Loader/ProductLoader.php';
+require 'Loader/CustomerLoader.php';
+require 'Loader/GroupLoader.php';
+
 require 'Model/Calculator.php';
 require 'Model/Connection.php';
 require 'Model/Customer.php';

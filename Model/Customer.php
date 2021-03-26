@@ -10,6 +10,7 @@ class Customer
     private int $variable_discount;
     /** @var Group[] $groups */
     private array|null $groups; //optional ->performance
+    private const DIVIDER = 100;
 
 
     public function __construct(int $id, string $firstname, string $lastname, int $fixed_discount, int $variable_discount, array $groups = null)
@@ -58,28 +59,7 @@ class Customer
         return $this->variable_discount;
     }
 
-
-    //highest variable discount of costumer 1) + takes the largest percentage 5)
-    public function getHighestVariableDiscount(): int
-    {
-        $varDisc = [0];
-        foreach ($this->groups as $group) {
-            $varDisc[] = $group->getVariableDiscount();
-        }
-        $varDisc[] = $this->variable_discount;
-        return max($varDisc);
-    }
-
-
-    //count all fixed discount up , costumer has multiple groups
-    public function getTotalFixedDiscount(): int
-    {
-        $fixDisc = 0;
-        foreach ($this->groups as $group) {
-            $toAdd = $group->getFixedDiscount() !== null ? $group->getFixedDiscount() : 0;
-            $fixDisc += $toAdd;
-        }
-        //$fixDisc+= $this->fixed_discount;
-        return $fixDisc;
+    public function hasFixedDiscount() : bool{
+        return $this->fixed_discount !== 0;
     }
 }

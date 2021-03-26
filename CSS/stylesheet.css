@@ -89,3 +89,10 @@ a:hover {
     font-weight: bold;
     color: #fffff0;
 }
+.result {
+    font-size: 20px;
+    font-weight: bolder;
+    margin: auto;
+    text-align: center;
+    border-style: 1px solid black;
+}

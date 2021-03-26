@@ -3,25 +3,89 @@ declare(strict_types=1);
 
 class Calculator
 {
-    private int $price;
     private const DIVIDER = 100;
+    private const FIXED_GROUP_DISCOUNT = true;
 
-
-    public static function calculatePrice(Customer $customer, Product $product): float
+    public function calculateBestDiscount(Customer $customer, Product $product): float
     {
-        $highestVariableDiscount = $customer->getHighestVariableDiscount();
-        $totalFixedDiscount = $customer->getTotalFixedDiscount();
-        $price = $product->getPrice();
+        $productPrice = $product->getPrice();
+        $highestVariableDiscountFromGroups = $this->getHighestVariableDiscountFromGroups($customer->getGroups()) / self::DIVIDER;
+        $totalFixedDiscountFromGroups = $this->getTotalFixedDiscountFromGroups($customer->getGroups());
 
-        $priceAfterVarDiscount = $price * (1 - ($highestVariableDiscount / self::DIVIDER));
+        if ($customer->hasFixedDiscount()) {
+            $customerFixedDiscount = $customer->getFixedDiscount();
+            //fixed discount is not higher
+            if (!$this->isFixedGroupDiscountHighest($product, $highestVariableDiscountFromGroups, $totalFixedDiscountFromGroups)) {
+                $finalPrice = $productPrice - (($productPrice - $customerFixedDiscount) * (1 - $highestVariableDiscountFromGroups)) - $customerFixedDiscount;
 
-        //if price - discount is not negative => shows price after discount ,otherwise 0
-        $priceAfterFixedDiscount = $price - $totalFixedDiscount >= 0 ? $price - $totalFixedDiscount: 0;
+            } else {
+                $finalPrice = $productPrice - $customerFixedDiscount + $totalFixedDiscountFromGroups;
 
-        //returns the lowest price
-        return min($priceAfterVarDiscount,$priceAfterFixedDiscount);
+            }
+        } else {
+            $customerVariableDiscount = $customer->getVariableDiscount() / self::DIVIDER;
+            $highestVariableDiscount = $this->getHighestVariableDiscount($customer) / self::DIVIDER;
+            //fixed discount is higher
+            if (!$this->isFixedGroupDiscountHighest($product, $highestVariableDiscountFromGroups, $totalFixedDiscountFromGroups)) {
+                $finalPrice = ($productPrice - $totalFixedDiscountFromGroups) * (1 - $customerVariableDiscount) ;
+            } else {
+                $finalPrice = $productPrice * (1 - $highestVariableDiscount);
+
+            }
+            if ($finalPrice < 0) {
+                $finalPrice = 0;
+            }
+        }
+        return $finalPrice;
+    }
+
+    private function isFixedGroupDiscountHighest(Product $product, float $groupVarDiscount, int $groupFixDiscount): bool
+    {
+        $productPrice = $product->getPrice();
+        $groupVarDisc = $productPrice * $groupVarDiscount;
+
+        if ($groupVarDisc > $groupFixDiscount) {
+            return self::FIXED_GROUP_DISCOUNT;
+        }
+        if ($groupVarDisc < $groupFixDiscount) {
+            return !self::FIXED_GROUP_DISCOUNT;
+        }
+        if ($groupFixDiscount === 0) {
+            return !self::FIXED_GROUP_DISCOUNT;
+        }
+        return !self::FIXED_GROUP_DISCOUNT;
+    }
+
+    //highest variable discount of costumer 1)
+    private function getHighestVariableDiscountFromGroups(array $groups): int
+    {
+        $varDisc = [];
+        foreach ($groups as $group) {
+            $varDisc[] = $group->getVariableDiscount();
+        }
+        return max($varDisc);
     }
 
 
+    // takes the largest percentage 5) =>compare var discount of groups and customers
+    private function getHighestVariableDiscount(Customer $customer): int
+    {
+        $varDisc = [];
+        $varDisc [] = $this->getHighestVariableDiscountFromGroups($customer->getGroups());
+        $varDisc [] = $customer->getVariableDiscount();
+        return max($varDisc);
+    }
+
+
+    //count all fixed discount up , costumer has multiple groups
+    private function getTotalFixedDiscountFromGroups(array $groups): int
+    {
+        $fixDisc = 0;
+        foreach ($groups as $group) {
+            $toAdd = $group->getFixedDiscount() !== null ? $group->getFixedDiscount() : 0;
+            $fixDisc += $toAdd;
+        }
+        return $fixDisc;
+    }
 
 }

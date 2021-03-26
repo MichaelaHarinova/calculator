@@ -40,7 +40,7 @@ class CustomerLoader
 //in here because I'm getting customers
     public function getAllGroups(int $groupID): array
     {
-        $query = $this->pdo->prepare('select * from customer_group WHERE id = :groupID ORDER BY name');
+        $query = $this->pdo->prepare('select * from customer_group WHERE id = :groupID');
         $groups = [];
         //gets the original group
         $query->bindValue(':groupID', $groupID);
