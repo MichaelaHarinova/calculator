@@ -18,8 +18,8 @@ class Calculator
         if ($customer->hasFixedDiscount()) {
             //fixed discount is not higher
             if ($this->isVariableGroupDiscountHighest($product, $highestVariableDiscountFromGroups, $totalFixedDiscountFromGroups)) {
-                $varDiscount = (($productPrice - $customerFixedDiscount) * (1 - $highestVariableDiscountFromGroups));
-                $finalPrice = $productPrice - ($varDiscount - $customerFixedDiscount);
+                $finalPrice  = (($productPrice - $customerFixedDiscount) * (1 - $highestVariableDiscountFromGroups));
+
             } else {
                 $finalPrice = $productPrice - ($customerFixedDiscount + $totalFixedDiscountFromGroups);
             }
@@ -28,8 +28,8 @@ class Calculator
             $highestVariableDiscount = $this->getHighestVariableDiscount($customer) / self::DIVIDER;
             //fixed discount is higher
             if (!$this->isVariableGroupDiscountHighest($product, $highestVariableDiscountFromGroups, $totalFixedDiscountFromGroups)) {
-                $varDiscount =  (($productPrice - $totalFixedDiscountFromGroups) * (1 - $highestVariableDiscount));
-                $finalPrice = $productPrice - $varDiscount  - $totalFixedDiscountFromGroups;
+                $finalPrice =  (($productPrice - $totalFixedDiscountFromGroups) * (1 - $highestVariableDiscount));
+
             } else {
                 $finalPrice = $productPrice * (1 - $highestVariableDiscount);
             }
@@ -43,14 +43,15 @@ class Calculator
     private function isVariableGroupDiscountHighest(Product $product, float $groupVarDiscount, int $groupFixDiscount): bool
     {
         $productPrice = $product->getPrice();
-        $groupVarDisc = $productPrice * $groupVarDiscount;
+        $groupVarDisc = $productPrice - ($productPrice * $groupVarDiscount);
+        $groupFixDisc = $productPrice - $groupFixDiscount;
 
 
-        if ($groupVarDisc > $groupFixDiscount) {
-            return self::FIXED_GROUP_DISCOUNT;
-        }
-        if ($groupVarDisc < $groupFixDiscount) {
+        if ($groupVarDisc > $groupFixDisc) {
             return !self::FIXED_GROUP_DISCOUNT;
+        }
+        if ($groupVarDisc < $groupFixDisc) {
+            return self::FIXED_GROUP_DISCOUNT;
         }
         return !self::FIXED_GROUP_DISCOUNT;
     }
