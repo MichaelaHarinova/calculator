@@ -17,7 +17,7 @@ class CustomerLoader
         $query->bindValue(':customerID', $customerID);
         $query->execute();
         //returns array of arrays, it will always contain a unique record, so we take the 1st one
-        $customer = $query->fetchAll()[0];
+        $customer = $query->fetch();
         $customer = new Customer((int)$customer['id'], $customer['firstname'], $customer['lastname'], (int)$customer['fixed_discount'], (int)$customer['variable_discount'], $this->getAllGroups($customer['group_id']));
 
         return $customer;
@@ -26,7 +26,7 @@ class CustomerLoader
 
     public function getAllCustomers(): array
     {
-        $query = $this->pdo->query('select * from customer ORDER BY lastname');
+        $query = $this->pdo->query('select * from customer ORDER BY firstname');
         $customersArray = $query->fetchAll();
         $customers = [];
 
@@ -45,8 +45,8 @@ class CustomerLoader
         //gets the original group
         $query->bindValue(':groupID', $groupID);
         $query->execute();
-        $group = $query->fetchAll()[0];
-        $groups[] = new Group((int)$group['id'], $group['name'], $group['parent_id'],$group['fixed_discount'], $group['variable_discount']);
+        $group = $query->fetch();
+        $groups[] = new Group((int)$group['id'], $group['name'], $group['parent_id'], $group['fixed_discount'], $group['variable_discount']);
 
         //gets the last group from the array
         $parentID = $groups[0]->getParentId();
@@ -54,9 +54,9 @@ class CustomerLoader
         while (isset($parentID)) {
             $query->bindValue(':groupID', $group['parent_id']);
             $query->execute();
-            $group = $query->fetchAll()[0];
+            $group = $query->fetch();
             $groups[] = new Group($group['id'], $group['name'], $group['parent_id'], $group['fixed_discount'], $group['variable_discount']);
-            $parentID = $groups[count($groups)-1]->getParentId();
+            $parentID = $groups[count($groups) - 1]->getParentId();
         }
         return $groups;
     }

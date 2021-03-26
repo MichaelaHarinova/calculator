@@ -11,38 +11,40 @@ class Calculator
         $productPrice = $product->getPrice();
         $highestVariableDiscountFromGroups = $this->getHighestVariableDiscountFromGroups($customer->getGroups()) / self::DIVIDER;
         $totalFixedDiscountFromGroups = $this->getTotalFixedDiscountFromGroups($customer->getGroups());
+        $customerFixedDiscount = $customer->getFixedDiscount();
+        $finalPrice = 0;
+
 
         if ($customer->hasFixedDiscount()) {
-            $customerFixedDiscount = $customer->getFixedDiscount();
             //fixed discount is not higher
-            if (!$this->isFixedGroupDiscountHighest($product, $highestVariableDiscountFromGroups, $totalFixedDiscountFromGroups)) {
-                $finalPrice = $productPrice - (($productPrice - $customerFixedDiscount) * (1 - $highestVariableDiscountFromGroups)) - $customerFixedDiscount;
-
+            if ($this->isVariableGroupDiscountHighest($product, $highestVariableDiscountFromGroups, $totalFixedDiscountFromGroups)) {
+                $varDiscount = (($productPrice - $customerFixedDiscount) * (1 - $highestVariableDiscountFromGroups));
+                $finalPrice = $productPrice - ($varDiscount - $customerFixedDiscount);
             } else {
-                $finalPrice = $productPrice - $customerFixedDiscount + $totalFixedDiscountFromGroups;
-
+                $finalPrice = $productPrice - ($customerFixedDiscount + $totalFixedDiscountFromGroups);
             }
         } else {
-            $customerVariableDiscount = $customer->getVariableDiscount() / self::DIVIDER;
+            //  $customerVariableDiscount = $customer->getVariableDiscount() / self::DIVIDER;
             $highestVariableDiscount = $this->getHighestVariableDiscount($customer) / self::DIVIDER;
             //fixed discount is higher
-            if (!$this->isFixedGroupDiscountHighest($product, $highestVariableDiscountFromGroups, $totalFixedDiscountFromGroups)) {
-                $finalPrice = ($productPrice - $totalFixedDiscountFromGroups) * (1 - $customerVariableDiscount) ;
+            if (!$this->isVariableGroupDiscountHighest($product, $highestVariableDiscountFromGroups, $totalFixedDiscountFromGroups)) {
+                $varDiscount =  (($productPrice - $totalFixedDiscountFromGroups) * (1 - $highestVariableDiscount));
+                $finalPrice = $productPrice - $varDiscount  - $totalFixedDiscountFromGroups;
             } else {
                 $finalPrice = $productPrice * (1 - $highestVariableDiscount);
-
-            }
-            if ($finalPrice < 0) {
-                $finalPrice = 0;
             }
         }
-        return $finalPrice;
+        if ($finalPrice < 0) {
+            $finalPrice = 0;
+        }
+        return round($finalPrice, 2);
     }
 
-    private function isFixedGroupDiscountHighest(Product $product, float $groupVarDiscount, int $groupFixDiscount): bool
+    private function isVariableGroupDiscountHighest(Product $product, float $groupVarDiscount, int $groupFixDiscount): bool
     {
         $productPrice = $product->getPrice();
         $groupVarDisc = $productPrice * $groupVarDiscount;
+
 
         if ($groupVarDisc > $groupFixDiscount) {
             return self::FIXED_GROUP_DISCOUNT;
@@ -50,14 +52,11 @@ class Calculator
         if ($groupVarDisc < $groupFixDiscount) {
             return !self::FIXED_GROUP_DISCOUNT;
         }
-        if ($groupFixDiscount === 0) {
-            return !self::FIXED_GROUP_DISCOUNT;
-        }
         return !self::FIXED_GROUP_DISCOUNT;
     }
 
     //highest variable discount of costumer 1)
-    private function getHighestVariableDiscountFromGroups(array $groups): int
+    private function getHighestVariableDiscountFromGroups(array $groups): ?int
     {
         $varDisc = [];
         foreach ($groups as $group) {
@@ -67,7 +66,7 @@ class Calculator
     }
 
 
-    // takes the largest percentage 5) =>compare var discount of groups and customers
+    // takes the largest percentage =>compare var discount of groups and customers
     private function getHighestVariableDiscount(Customer $customer): int
     {
         $varDisc = [];

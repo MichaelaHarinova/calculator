@@ -20,7 +20,7 @@ class ProductLoader
         $query->execute();
 
         //fetch - test
-        $rawProduct = $query->fetchAll()[0];
+        $rawProduct = $query->fetch();
         $product = new Product ((int)$rawProduct['id'], $rawProduct['name'], (int)$rawProduct['price']);
 
         return $product;
