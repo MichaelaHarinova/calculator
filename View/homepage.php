@@ -22,6 +22,6 @@
                 </option>
             <?php endforeach; ?>
         </select><br>
-        <input id="submit" type="submit" name="calculate" value="Calculate you price"/>
+        <input id="submit" type="submit" name="calculate" value="Calculate your price"/>
     </form>
 </section>

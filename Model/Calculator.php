@@ -11,13 +11,15 @@ class Calculator
         $productPrice = $product->getPrice();
         $highestVariableDiscountFromGroups = $this->getHighestVariableDiscountFromGroups($customer->getGroups()) / self::DIVIDER;
         $totalFixedDiscountFromGroups = $this->getTotalFixedDiscountFromGroups($customer->getGroups());
+        $customerFixedDiscount = $customer->getFixedDiscount();
         $finalPrice = 0;
 
+
         if ($customer->hasFixedDiscount()) {
-            $customerFixedDiscount = $customer->getFixedDiscount();
             //fixed discount is not higher
             if ($this->isVariableGroupDiscountHighest($product, $highestVariableDiscountFromGroups, $totalFixedDiscountFromGroups)) {
-                $finalPrice = $productPrice - (($productPrice - $customerFixedDiscount) * (1 - $highestVariableDiscountFromGroups)) - $customerFixedDiscount;
+                $varDiscount = (($productPrice - $customerFixedDiscount) * (1 - $highestVariableDiscountFromGroups));
+                $finalPrice = $productPrice - ($varDiscount - $customerFixedDiscount);
             } else {
                 $finalPrice = $productPrice - ($customerFixedDiscount + $totalFixedDiscountFromGroups);
             }
@@ -25,8 +27,9 @@ class Calculator
             //  $customerVariableDiscount = $customer->getVariableDiscount() / self::DIVIDER;
             $highestVariableDiscount = $this->getHighestVariableDiscount($customer) / self::DIVIDER;
             //fixed discount is higher
-            if ($this->isVariableGroupDiscountHighest($product, $highestVariableDiscountFromGroups, $totalFixedDiscountFromGroups)) {
-                $finalPrice = $productPrice - (($productPrice - $totalFixedDiscountFromGroups) * (1 - $highestVariableDiscount)) - $totalFixedDiscountFromGroups;
+            if (!$this->isVariableGroupDiscountHighest($product, $highestVariableDiscountFromGroups, $totalFixedDiscountFromGroups)) {
+                $varDiscount =  (($productPrice - $totalFixedDiscountFromGroups) * (1 - $highestVariableDiscount));
+                $finalPrice = $productPrice - $varDiscount  - $totalFixedDiscountFromGroups;
             } else {
                 $finalPrice = $productPrice * (1 - $highestVariableDiscount);
             }
@@ -63,7 +66,7 @@ class Calculator
     }
 
 
-    // takes the largest percentage 5) =>compare var discount of groups and customers
+    // takes the largest percentage =>compare var discount of groups and customers
     private function getHighestVariableDiscount(Customer $customer): int
     {
         $varDisc = [];
