@@ -1,3 +1,5 @@
+<?php require 'View/includes/header.php'; ?>
+
 <section>
     <h2>Products database</h2>
     <form id="productlist" name="productlist" method="post">
@@ -25,3 +27,9 @@
         <input id="submit" type="submit" name="calculate" value="Calculate your price"/>
     </form>
 </section>
+
+<?php if(isset($result)):?>
+    <?php require 'View/calcView.php';?>
+<?php endif;?>
+
+<?php require 'View/includes/footer.php'; ?>

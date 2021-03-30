@@ -18,12 +18,15 @@ class CustomerLoader
         $query->execute();
         //returns array of arrays, it will always contain a unique record, so we take the 1st one
         $customer = $query->fetch();
-        $customer = new Customer((int)$customer['id'], $customer['firstname'], $customer['lastname'], (int)$customer['fixed_discount'], (int)$customer['variable_discount'], $this->getAllGroups($customer['group_id']));
+        $customer = new Customer((int)$customer['id'], $customer['firstname'], $customer['lastname'], (int)$customer['fixed_discount'], (int)$customer['variable_discount']);
+        foreach($this->getAllGroups($customer['group_id']) AS $group) {
+            $customer->addGroup($group);
+        }
 
         return $customer;
     }
 
-
+    /** @return Customer[] */
     public function getAllCustomers(): array
     {
         $query = $this->pdo->query('select * from customer ORDER BY firstname');
@@ -38,6 +41,7 @@ class CustomerLoader
 
 
 //in here because I'm getting customers
+    /** @return Group[] */
     public function getAllGroups(int $groupID): array
     {
         $query = $this->pdo->prepare('select * from customer_group WHERE id = :groupID');

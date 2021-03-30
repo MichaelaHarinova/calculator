@@ -21,21 +21,22 @@ class ProductLoader
 
         //fetch - test
         $rawProduct = $query->fetch();
-        $product = new Product ((int)$rawProduct['id'], $rawProduct['name'], (int)$rawProduct['price']);
-
-        return $product;
+        return new Product ((int)$rawProduct['id'], $rawProduct['name'], (int)$rawProduct['price']);
     }
 
-
+    /** @return Product[] */
     public function getAllProducts(): array
     {
-        $query = $this->pdo->query('select * from product ORDER BY name');
-        $productsArray = $query->fetchAll();
-        $products = [];
-
-        foreach ($productsArray as $product) {
-            $products[] = new Product((int)$product['id'], $product['name'], (int)$product['price']);
+        if(count($this->products)) { // lazy loading
+            return $this->products;
         }
-        return $products;
+
+        $query = $this->pdo->query('select * from product ORDER BY name');
+        $this->products = [];
+
+        foreach ($query->fetchAll() as $product) {
+            $this->products[] = new Product((int)$product['id'], $product['name'], (int)$product['price']);
+        }
+        return $this->products;
     }
 }

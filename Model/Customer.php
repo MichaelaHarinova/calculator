@@ -23,6 +23,10 @@ class Customer
         $this->groups = $groups;
     }
 
+    public function addGroup(Group $group)
+    {
+        $this->groups[] = $group;
+    }
 
     public function getId(): ?int
     {
